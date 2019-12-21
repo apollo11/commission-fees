@@ -6,7 +6,7 @@ namespace CommissionFees\CommissionTask\Service\Fees;
 
 use CommissionFees\CommissionTask\Service\Helper\ParseCsv;
 
-class CashIn extends ParseCsv
+class CashIn
 {
     use
         Currencies;
