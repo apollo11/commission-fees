@@ -4,17 +4,23 @@ declare(strict_types=1);
 
 namespace CommissionFees\CommissionTask\Service;
 
-class Commission
-{
-    private $scale;
+use CommissionFees\CommissionTask\Service\Fees\CashIn;
+use CommissionFees\CommissionTask\Service\Helper\ParseCsv;
 
-    public function __construct(int $scale)
+class Commission extends ParseCsv
+{
+    public $scale;
+
+    public function __construct()
     {
-        $this->scale = $scale;
+        $this->scale = ParseCsv::_stdinCsv();
     }
 
-    public function add(string $leftOperand, string $rightOperand): string
+    public function cashIn()
     {
-        return bcadd($leftOperand, $rightOperand, $this->scale);
+        $cashIn = new CashIn($this->scale);
+        $results = $cashIn->komisyon();
+
+        return $results;
     }
 }

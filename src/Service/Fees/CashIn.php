@@ -4,72 +4,103 @@ declare(strict_types=1);
 
 namespace CommissionFees\CommissionTask\Service\Fees;
 
-use CommissionFees\CommissionTask\Service\Helper\ParseCsv;
-
 class CashIn
 {
-    use
-        Currencies;
-
-    const
-        COMMISSION_FEE = 0.03
-        ;
+    use Currencies;
 
     /**
-     * Define date.
+     * Set constant.
+     */
+    const
+        COMMISSION_FEE = 0.03;
+
+    /**
+     * Set property date.
      *
-     * @var $date
+     * @var
      */
     private $date;
 
     /**
+     * Set property for identification no.
+     *
      * @var
      */
     private $identificationNo;
 
     /**
-     * @var $userType
+     * Set property user type.
+     *
+     * @var
      */
     private $userType;
 
     /**
-     * @var $operationType
+     * Set property operation type.
+     *
+     * @var
      */
     private $operationType;
 
     /**
-     * @var $operationAmt
+     * Set property operation amount.
+     *
+     * @var
      */
     private $operationAmt;
 
     /**
-     * @var $currency
+     * Set property currency.
+     *
+     * @var
      */
     private $currency;
 
     /**
-     * @var $data
+     * Set property data.
+     *
+     * @var
      */
-    protected $data;
+    private $data = [];
 
     /**
-     * @var $percentage
+     * Set property percentage.
+     *
+     * @var
      */
-    protected $percentage;
+    protected $percentage = self::COMMISSION_FEE;
+
+    private $convertedAmount;
+
+    public $commissionFee;
+
+    public $fee;
+
+    public function __construct($scale)
+    {
+        $this->data = $scale;
+    }
 
     /**
-     * @param $date
-     * @return mixed
+     * Set data and assign to property data.
      */
-    private function setDate($date)
+    public function setData(array $data): array
+    {
+        return
+            $this->data = $data;
+    }
+
+    /**
+     * Set date and assign to property date.
+     */
+    private function setDate(string $date): string
     {
         return
             $this->date = $date;
     }
 
     /**
-     * @param int $idNo
-     * @return int
+     *  Set identificationNo and assign to property identificationNo.
      */
     private function setIdentificationNo(int $idNo): int
     {
@@ -78,8 +109,7 @@ class CashIn
     }
 
     /**
-     * @param string $userType
-     * @return string
+     * Set UserType and assign to property userType.
      */
     private function setUserType(string $userType): string
     {
@@ -88,8 +118,7 @@ class CashIn
     }
 
     /**
-     * @param string $operationType
-     * @return string
+     *  Set OperationType and assign to property operationType.
      */
     private function setOperationType(string $operationType): string
     {
@@ -98,10 +127,7 @@ class CashIn
     }
 
     /**
-     * Description.
-     *
-     * @param float $operation
-     * @return float
+     *  Set OperationAmt and assign to property operationAmt.
      */
     private function setOperationAmt(float $operation): float
     {
@@ -110,8 +136,7 @@ class CashIn
     }
 
     /**
-     * @param string $currency
-     * @return string
+     *  Set currency and assign to property currency.
      */
     private function setCurrency(string $currency): string
     {
@@ -119,22 +144,43 @@ class CashIn
             $this->currency = $currency;
     }
 
-    /**
-     * @return ParseCsv
-     */
-    private function setData()
+    private function setTotalAmt($currency, $operationAmt)
     {
-        return
-            $this->data = new ParseCsv();
+        $this->convertedAmount = $this->_returnConversion($currency, $operationAmt);
     }
 
-    /**
-     * @return float
-     */
-    private function setFee(): float
+    private function setCommissionFee($convertedAmt, $operationType, $userType)
     {
-        return
-            $this->percentage = self::COMMISSION_FEE;
+        $this->fee = $this->_setFee($convertedAmt, $operationType, $userType);
+
+        return $this->fee;
     }
 
+    public function komisyon()
+    {
+        $return = [];
+        if (is_array($this->data)) {
+            for ($i = 0; $i < count($this->data); ++$i) {
+                $this->setDate($this->data[$i][0]);
+                $this->setIdentificationNo((int) $this->data[$i][1]);
+                $this->setOperationType((string) $this->data[$i][3]);
+                $this->setUserType((string) $this->data[$i][2]);
+                $this->setOperationAmt((float) $this->data[$i][4]);
+                $this->setCurrency($this->data[$i][5]);
+                $this->setTotalAmt($this->currency, $this->operationAmt);
+                $this->setCommissionFee($this->convertedAmount, $this->operationType, $this->userType);
+
+                $return[$i]['date'] = $this->date;
+                $return[$i]['id'] = $this->identificationNo;
+                $return[$i]['user_type'] = $this->userType;
+                $return[$i]['operation_type'] = $this->operationType;
+                $return[$i]['operation_amt'] = $this->operationAmt;
+                $return[$i]['currency'] = $this->currency;
+                $return[$i]['converted_amt'] = $this->convertedAmount;
+                $return[$i]['commission_fee'] = $this->fee;
+            }
+        }
+
+        return $return;
+    }
 }

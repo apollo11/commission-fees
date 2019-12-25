@@ -6,36 +6,102 @@ namespace CommissionFees\CommissionTask\Service\Fees;
 
 trait Currencies
 {
-    public function _euroToUsdConversion(float $amount): float
-    {
-        return $amount * 1.1497;
-    }
+    private $rates = [
+        'EUR' => 1.0, 'JPY' => 129.53, 'USD' => 1.1497,
+    ];
 
-    public function _euroToJpyConversion(float $amount): float
-    {
-        return $amount * 129.53;
-    }
+    private $rateValue;
 
-    public function _euroAmount(float $amount): float
-    {
-        return $amount;
-    }
-
+    /**
+     * Description.
+     */
     public function _returnConversion(string $currency, float $amount): float
     {
-        switch($currency) {
-            case 'USD':
-                $result =  $this->_euroToUsdConversion($amount);
+        return
+            $this->_euroConversion($amount, $currency);
+    }
+
+    /**
+     * Description.
+     */
+    public function _euroConversion(float $amount, string $currency): float
+    {
+        $rateValue = round($amount / $this->rates[$currency], 2);
+
+        return $rateValue;
+    }
+
+    /**
+     * Description.
+     */
+    public function _setFee($convertedAmt, $operationType, $userType)
+    {
+        switch ($operationType) {
+            case 'cash_in':
+                $return = $this->_cashIn($convertedAmt);
                 break;
-            case 'JPY':
-                $result =  $this->_euroToJpyConversion($amount);
+            case 'cash_out':
+                $return = $this->_cashOut($convertedAmt, $userType);
+
                 break;
             default:
-                $result = $this->_euroAmount($amount);
+                $return = [];
                 break;
-
         }
 
-        return $result;
+        return $return;
+    }
+
+    /**
+     * Description.
+     */
+    public function _cashIn(float $convertedAmt): float
+    {
+
+        if ($convertedAmt <= 5.0) {
+
+            $return = round($convertedAmt * 0.03, 3);
+
+        } else {
+
+            $return = 0.00;
+        }
+
+        return $return;
+    }
+
+    /**
+     * Description.
+     */
+    public function _cashOut(float $convertedAmt, string $userType): float
+    {
+        switch ($userType) {
+
+            case 'legal':
+
+                $return = round($convertedAmt * 0.3, 3);
+
+                break;
+
+            case 'natural':
+
+                if ($convertedAmt >= 0.50) {
+
+                    $return = round($convertedAmt * 0.3, 3);
+
+                } else {
+
+                    $return = 0.00;
+                }
+                break;
+
+            default:
+
+                $return = [];
+
+                break;
+        }
+
+        return $return;
     }
 }

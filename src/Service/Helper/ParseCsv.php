@@ -6,21 +6,25 @@ namespace CommissionFees\CommissionTask\Service\Helper;
 
 class ParseCsv
 {
-    public static function thanks()
+    /**
+     * Get stdin file from the script, parse then set to array.
+     *
+     * @return string
+     */
+    public static function _stdinCsv(): array
     {
+        $result = [];
         try {
+            $stdin = file_get_contents('php://stdin', true);
+            $getCSvs = str_getcsv($stdin, PHP_EOL, '"');
 
-            $in = file_get_contents('php://stdin', true);
-            $test = str_getcsv($in, PHP_EOL, '"');
-
-            foreach ($test as $key => $value) {
-                $return[$key] = explode(',', $value);
+            foreach ($getCSvs as $getCSv => $value) {
+                $result[$getCSv] = explode(',', $value);
             }
-
-            return $return;
         } catch (\ErrorException $e) {
-
-            return $e->getMessage();
+            $result = $e->getMessage();
         }
+
+        return $result;
     }
 }

@@ -1,19 +1,11 @@
-<?php require __DIR__.'/vendor/autoload.php';?>
-<?php
-use CommissionFees\CommissionTask\Console\index;
-?>
-
-
 <?php
 
-//print_r($test->thanks());
+declare(strict_types=1);
 
-$index = new index();
+require __DIR__.'/vendor/autoload.php';
 
-print_r($index->test());
+use CommissionFees\CommissionTask\Service\Commission;
 
-?>
+$index = new Commission();
 
-
-
-
+print_r($index->cashin());
