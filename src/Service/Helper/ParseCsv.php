@@ -7,7 +7,7 @@ namespace CommissionFees\CommissionTask\Service\Helper;
 class ParseCsv
 {
     /**
-     * @return array|string
+     * Use stdin to get the result and explode.
      */
     public static function _stdinCsv(): array
     {
@@ -20,9 +20,11 @@ class ParseCsv
                 $result[$getCSv] = explode(',', $value);
             }
 
-            return $result;
+            return
+                $result;
         } catch (\Error $e) {
-            return [$e->getCode(), $e->getMessage()];
+            return
+                [$e->getCode(), $e->getMessage()];
         }
     }
 }

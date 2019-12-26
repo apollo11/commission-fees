@@ -20,7 +20,8 @@ trait CurrencyConversion
     {
         $rateValue = $amount / $this->rates[$currency];
 
-        return $rateValue;
+        return
+            $rateValue;
     }
 
     /**
@@ -30,18 +31,6 @@ trait CurrencyConversion
     {
         return
             ($amount * $this->rates[$currency]) / 100;
-    }
-
-    /**
-     * Return the final conversion of currency per country.
-     */
-    public function _returnConversionBaseOnCurrency(float $amount, string $currency)
-    {
-        $conversionByCurrency = $this->_getConversionBaseOnCurrency($amount, $currency);
-        $roundingOffFee = round($conversionByCurrency, 3);
-
-        return
-            $this->_formattingCommissionFee($roundingOffFee);
     }
 
     /**
@@ -55,5 +44,20 @@ trait CurrencyConversion
         }
 
         return $roundingOffFee;
+    }
+
+    /**
+     * Return the final conversion of currency per country.
+     */
+    public function _returnConversionBaseOnCurrency(float $amount, string $currency)
+    {
+        $conversionByCurrency =
+            $this->_getConversionBaseOnCurrency($amount, $currency);
+
+        $roundingOffFee =
+            round($conversionByCurrency, 3);
+
+        return
+            $this->_formattingCommissionFee($roundingOffFee);
     }
 }

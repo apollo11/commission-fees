@@ -12,14 +12,14 @@ class ComputeCommission extends ParseCsv
     /**
      * @var array|string
      */
-    public $scsvData;
+    public $csvData;
 
     /**
      * ComputeCommission constructor.
      */
     public function __construct()
     {
-        $this->scsvData = ParseCsv::_stdinCsv();
+        $this->csvData = ParseCsv::_stdinCsv();
     }
 
     /**
@@ -27,7 +27,7 @@ class ComputeCommission extends ParseCsv
      */
     public function _runAndCalculateCommissionFee()
     {
-        $cashIn = new TotalAmount($this->scsvData);
+        $cashIn = new TotalAmount($this->csvData);
 
         $results =
             $cashIn->calculatedCommissionFee();
