@@ -6,179 +6,52 @@ namespace CommissionFees\CommissionTask\Service\Fees;
 
 class CashIn
 {
-    use Currencies;
-
     /**
-     * Set constant.
+     * Define property for convented amount.
      */
-    const
-        COMMISSION_FEE = 0.03;
+    private $convertedAmount;
 
     /**
-     * Set property date.
-     *
-     * @var
-     */
-    private $date;
-
-    /**
-     * Set property for identification no.
-     *
-     * @var
-     */
-    private $identificationNo;
-
-    /**
-     * Set property user type.
-     *
-     * @var
+     * Define property for user type.
      */
     private $userType;
 
     /**
-     * Set property operation type.
-     *
-     * @var
+     * Define constant for cash in commission.
      */
-    private $operationType;
+    const
+        CASH_IN_MAKE_COMMISSION = 5.0;
 
     /**
-     * Set property operation amount.
-     *
-     * @var
+     * Define const for percentage use when getting cash in fee.
      */
-    private $operationAmt;
+    const
+        CASH_IN_PERCENTAGE = 0.03;
 
     /**
-     * Set property currency.
-     *
-     * @var
+     * Define default round of result of cash in.
      */
-    private $currency;
+    const
+        ROUND_OF = 3;
 
     /**
-     * Set property data.
-     *
-     * @var
+     * Get converted amount and user type when initialized.
      */
-    private $data = [];
-
-    /**
-     * Set property percentage.
-     *
-     * @var
-     */
-    protected $percentage = self::COMMISSION_FEE;
-
-    private $convertedAmount;
-
-    public $commissionFee;
-
-    public $fee;
-
-    public function __construct($scale)
+    public function __construct(float $convertedAmount, string $userType = null)
     {
-        $this->data = $scale;
+        $this->convertedAmount = $convertedAmount;
+        $this->userType = $userType;
     }
 
     /**
-     * Set data and assign to property data.
+     * Computation and final result for cash in percentage.
      */
-    public function setData(array $data): array
+    public function _return(): float
     {
-        return
-            $this->data = $data;
-    }
-
-    /**
-     * Set date and assign to property date.
-     */
-    private function setDate(string $date): string
-    {
-        return
-            $this->date = $date;
-    }
-
-    /**
-     *  Set identificationNo and assign to property identificationNo.
-     */
-    private function setIdentificationNo(int $idNo): int
-    {
-        return
-            $this->identificationNo = $idNo;
-    }
-
-    /**
-     * Set UserType and assign to property userType.
-     */
-    private function setUserType(string $userType): string
-    {
-        return
-            $this->userType = $userType;
-    }
-
-    /**
-     *  Set OperationType and assign to property operationType.
-     */
-    private function setOperationType(string $operationType): string
-    {
-        return
-            $this->operationType = $operationType;
-    }
-
-    /**
-     *  Set OperationAmt and assign to property operationAmt.
-     */
-    private function setOperationAmt(float $operation): float
-    {
-        return
-            $this->operationAmt = $operation;
-    }
-
-    /**
-     *  Set currency and assign to property currency.
-     */
-    private function setCurrency(string $currency): string
-    {
-        return
-            $this->currency = $currency;
-    }
-
-    private function setTotalAmt($currency, $operationAmt)
-    {
-        $this->convertedAmount = $this->_returnConversion($currency, $operationAmt);
-    }
-
-    private function setCommissionFee($convertedAmt, $operationType, $userType)
-    {
-        $this->fee = $this->_setFee($convertedAmt, $operationType, $userType);
-
-        return $this->fee;
-    }
-
-    public function komisyon()
-    {
-        $return = [];
-        if (is_array($this->data)) {
-            for ($i = 0; $i < count($this->data); ++$i) {
-                $this->setDate($this->data[$i][0]);
-                $this->setIdentificationNo((int) $this->data[$i][1]);
-                $this->setOperationType((string) $this->data[$i][3]);
-                $this->setUserType((string) $this->data[$i][2]);
-                $this->setOperationAmt((float) $this->data[$i][4]);
-                $this->setCurrency($this->data[$i][5]);
-                $this->setTotalAmt($this->currency, $this->operationAmt);
-                $this->setCommissionFee($this->convertedAmount, $this->operationType, $this->userType);
-
-                $return[$i]['date'] = $this->date;
-                $return[$i]['id'] = $this->identificationNo;
-                $return[$i]['user_type'] = $this->userType;
-                $return[$i]['operation_type'] = $this->operationType;
-                $return[$i]['operation_amt'] = $this->operationAmt;
-                $return[$i]['currency'] = $this->currency;
-                $return[$i]['converted_amt'] = $this->convertedAmount;
-                $return[$i]['commission_fee'] = $this->fee;
-            }
+        if ($this->convertedAmount <= self::CASH_IN_MAKE_COMMISSION) {
+            $return = round($this->convertedAmount * self::CASH_IN_PERCENTAGE, self::ROUND_OF);
+        } else {
+            $return = 0.00;
         }
 
         return $return;

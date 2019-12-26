@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 require __DIR__.'/vendor/autoload.php';
 
-use CommissionFees\CommissionTask\Service\Commission;
+use CommissionFees\CommissionTask\Service\ComputeCommission;
 
-$index = new Commission();
+$index = new ComputeCommission();
 
-print_r($index->cashin());
+$index->_runAndCalculateCommissionFee();
