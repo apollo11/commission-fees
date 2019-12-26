@@ -32,7 +32,7 @@ class TotalAmount extends CommissionFee
     public function calculatedCommissionFee()
     {
         $output = [];
-        if (is_array($this->data)) {
+        if (!empty($this->data) && is_array($this->data)) {
             for ($i = 0; $i < count($this->data); ++$i) {
                 //Assign value to array via keys
                 $userType =
