@@ -27,15 +27,6 @@ class TotalAmount extends CommissionFee
     }
 
     /**
-     * Compute total amount with currency conversion.
-     */
-    private function _setTotalAmt(string $currency, float $operationAmt): float
-    {
-        return
-            $this->_currencyConversion($operationAmt, $currency);
-    }
-
-    /**
      * Parse the data from the CSV and return the final result for computation of percentage.
      */
     public function calculatedCommissionFee()
@@ -63,7 +54,16 @@ class TotalAmount extends CommissionFee
             }
         }
 
-        return implode($output, "\n");
+        return implode("\n", $output);
+    }
+
+    /**
+     * Compute total amount with currency conversion.
+     */
+    private function _setTotalAmt(string $currency, float $operationAmt): float
+    {
+        return
+            $this->_currencyConversion($operationAmt, $currency);
     }
 
     /**
