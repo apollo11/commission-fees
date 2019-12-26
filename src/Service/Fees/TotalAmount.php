@@ -54,7 +54,10 @@ class TotalAmount extends CommissionFee
             }
         }
 
-        return implode("\n", $output);
+        // Bug when updating to 7.41 deprecated implode when using parameter glue.
+        // Quick fix change glue as piece param and piece paras as glue.
+        return
+            phpversion() >= '7.4.1' ? implode("\n", $output) : implode($output, "\n");
     }
 
     /**

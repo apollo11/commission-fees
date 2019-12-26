@@ -20,7 +20,7 @@ class CashIn
      * Define constant for cash in commission.
      */
     const
-        CASH_IN_MAKE_COMMISSION = 5.0;
+        CASH_IN_MAKE_COMMISSION = 5.00;
 
     /**
      * Define const for percentage use when getting cash in fee.
