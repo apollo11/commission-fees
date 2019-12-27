@@ -49,11 +49,11 @@ class CashIn
     public function _return(): float
     {
         if ($this->convertedAmount <= self::CASH_IN_MAKE_COMMISSION) {
-            $return = round($this->convertedAmount * self::CASH_IN_PERCENTAGE, self::ROUND_OF);
+            $output = round($this->convertedAmount * self::CASH_IN_PERCENTAGE, self::ROUND_OF);
         } else {
-            $return = 0.00;
+            $output = 0.00;
         }
 
-        return $return;
+        return $output;
     }
 }

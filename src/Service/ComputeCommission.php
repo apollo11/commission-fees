@@ -32,8 +32,6 @@ class ComputeCommission extends ParseCsv
         $results =
             $cashIn->calculatedCommissionFee();
 
-        fwrite(STDOUT, $results);
-
         return
             $results;
     }

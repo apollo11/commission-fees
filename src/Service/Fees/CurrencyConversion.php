@@ -43,7 +43,8 @@ trait CurrencyConversion
                 number_format($roundingOffFee, 2, '.', '');
         }
 
-        return $roundingOffFee;
+        return
+            $roundingOffFee;
     }
 
     /**

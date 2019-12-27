@@ -7,17 +7,17 @@ namespace CommissionFees\CommissionTask\Service\Fees;
 class CommissionFee
 {
     /**
-     * Set property for operation type.
+     * Define property for operation type.
      */
     private $operationType;
 
     /**
-     * Set property for cash out.
+     * Define property for cash out.
      */
     private $cashOut;
 
     /**
-     * Set property for cash in.
+     * Define property for cash in.
      */
     private $cashIn;
 
@@ -32,7 +32,7 @@ class CommissionFee
     }
 
     /**
-     * Return the computer fee per commission fee type.
+     * Return the computation fee per commission fee type.
      */
     public function _returnComputedFeePerType()
     {

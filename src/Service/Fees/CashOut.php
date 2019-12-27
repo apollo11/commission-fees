@@ -29,7 +29,7 @@ class CashOut
         CASH_OUT_PERCENTAGE = 0.3;
 
     /**
-     * Define default round of result of cash in.
+     * Define default round of result of cash out.
      */
     const
         ROUND_OF = 3;
@@ -73,7 +73,7 @@ class CashOut
     private function _cashOutLegalType(): float
     {
         return
-            $this->convertedAmount * self::CASH_OUT_PERCENTAGE;
+            round($this->convertedAmount * self::CASH_OUT_PERCENTAGE, 3);
     }
 
     /**
@@ -82,11 +82,11 @@ class CashOut
     private function _cashOutNaturalType(): float
     {
         if ($this->convertedAmount >= self::CASH_OUT_MAKE_COMMISSION) {
-            $return = $this->convertedAmount * self::CASH_OUT_PERCENTAGE;
+            $output = round($this->convertedAmount * self::CASH_OUT_PERCENTAGE, 3);
         } else {
-            $return = 0.00;
+            $output = 0.00;
         }
 
-        return $return;
+        return $output;
     }
 }

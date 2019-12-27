@@ -32,32 +32,40 @@ class TotalAmount extends CommissionFee
     public function calculatedCommissionFee()
     {
         $output = [];
-        if (!empty($this->data) && is_array($this->data)) {
-            for ($i = 0; $i < count($this->data); ++$i) {
-                //Assign value to array via keys
-                $userType =
-                    (string) $this->data[$i][2];
-                $operationType =
-                    (string) $this->data[$i][3];
-                $operationAmt =
-                    (float) $this->data[$i][4];
-                $currency =
-                    (string) $this->data[$i][5];
-                $convertedAmount =
-                    $this
-                        ->_setTotalAmt($currency, $operationAmt);
+        try {
+            if (!array_key_exists('error', $this->data)) {
+                for ($i = 0; $i < count($this->data); ++$i) {
+                    //Assign value to array via keys
+                    if (count($this->data[$i]) === 6) {
+                        $userType =
+                            (string) $this->data[$i][2];
+                        $operationType =
+                            (string) $this->data[$i][3];
+                        $operationAmt =
+                            (float) $this->data[$i][4];
+                        $currency =
+                            (string) $this->data[$i][5];
+                        $convertedAmount =
+                            $this
+                                ->_setTotalAmt($currency, $operationAmt);
 
-                //Get converted amount, operation type, user type and currency then get the final result.
-                $output[] =
-                    $this
-                        ->_result($convertedAmount, $operationType, $userType, $currency);
+                        //Get converted amount, operation type, user type and currency then get the final result.
+                        $output[] =
+                            $this
+                                ->_result($convertedAmount, $operationType, $userType, $currency);
+                        continue;
+                    }
+                }
             }
+        } catch (\Exception $e) {
+            $output =
+                ['error' => [
+                    $e->getCode(), $e->getMessage(),
+                    ],
+                ];
         }
 
-        // Bug when updating to 7.41 deprecated implode when using parameter glue.
-        // Quick fix change glue as piece param and piece paras as glue.
-        return
-            phpversion() >= '7.4.1' ? implode("\n", $output) : implode($output, "\n");
+        return $output;
     }
 
     /**

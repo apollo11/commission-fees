@@ -24,7 +24,7 @@ class ParseCsv
                 $result;
         } catch (\Error $e) {
             return
-                [$e->getCode(), $e->getMessage()];
+                ['error' => [$e->getCode(), $e->getMessage()]];
         }
     }
 }
